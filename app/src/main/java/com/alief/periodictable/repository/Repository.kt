@@ -6,7 +6,7 @@ class Repository {
 
     suspend fun getElements() = RetrofitInstance.api.getElements()
 
-    suspend fun getSearchElement(symbol : String) =
+    suspend fun getSearchElements(symbol : String) =
         RetrofitInstance.api.getSearchElement(symbol)
 
 }
