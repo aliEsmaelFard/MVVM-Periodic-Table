@@ -30,89 +30,87 @@ class ViewModel(
     init {
         getElements()
     }
+
     private fun getElements() = viewModelScope.launch {
-        val response = myRepository.getElements()
-        handelAllElement(response)
+       safeAllElements()
     }
 
-    private fun handelAllElement(response: Response<ElementItem>) {
-        allElements.postValue(Resource.Loading())
+    private fun handelAllElement(response: Response<ElementItem>): Resource<ElementItem> {
 
+        if (response.isSuccessful) {
+            response.body()?.let {
+                return Resource.Success(response.body())
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    suspend fun safeAllElements(){
+        allElements.postValue(Resource.Loading())
         try {
-            if (hasInternetConnection()) {
-                if (response.isSuccessful) {
-                    allElements.postValue(Resource.Success(response.body()))
-                } else {
-                    allElements.postValue(Resource.Error(response.message()))
-                }
-            } else {
-                allElements.postValue(Resource.Error("No Internet"))
+            if (hasInternetConnection()){
+                val response = myRepository.getElements()
+                allElements.postValue(handelAllElement(response))
+            }
+            else{
+                allElements.postValue(Resource.Error("No Internet Connection"))
             }
 
-        }catch (t: Throwable) {
+        } catch (t: Throwable) {
             when(t) {
                 is IOException -> allElements.postValue(Resource.Error("Network Failure"))
                 else -> allElements.postValue(Resource.Error("Conversion Error"))
             }
         }
-
     }
-
     fun getSearchElements(symbol: String) = viewModelScope.launch {
-        val response = myRepository.getSearchElements(symbol)
-        handelSearchElement(response)
+        safeSearchElement(symbol)
     }
 
-    private fun handelSearchElement(response: Response<ElementItem>) {
+    private suspend fun safeSearchElement(symbol: String) {
         searchElements.postValue(Resource.Loading())
 
         try {
-            if (hasInternetConnection()) {
-                if (response.isSuccessful) {
-                    searchElements.postValue(Resource.Success(response.body()))
-                } else {
-                    searchElements.postValue(Resource.Error(response.message()))
-                }
-            } else {
-                searchElements.postValue(Resource.Error("No Internet"))
+            if (hasInternetConnection()){
+                val response = myRepository.getSearchElements(symbol)
+                searchElements.postValue(handelAllElement(response))
+            }
+            else{
+                searchElements.postValue(Resource.Error("No Internet Connection"))
             }
 
-        }catch (t: Throwable) {
+        } catch (t: Throwable) {
             when(t) {
                 is IOException -> searchElements.postValue(Resource.Error("Network Failure"))
                 else -> searchElements.postValue(Resource.Error("Conversion Error"))
             }
         }
-
     }
 
 
     fun getElementsByState(state: String) = viewModelScope.launch {
-        val response = myRepository.getElementByState(state)
-        handelStateElement(response)
+        safeStateElement(state)
     }
 
-    private fun handelStateElement(response: Response<ElementItem>) {
+    private suspend fun safeStateElement(state: String) {
 
         stateElements.postValue(Resource.Loading())
+
         try {
-            if (hasInternetConnection()) {
-                if (response.isSuccessful) {
-                    stateElements.postValue(Resource.Success(response.body()))
-                } else {
-                    stateElements.postValue(Resource.Error(response.message()))
-                }
-            } else {
-                stateElements.postValue(Resource.Error("No Internet"))
+            if (hasInternetConnection()){
+                val response = myRepository.getElementByState(state)
+                stateElements.postValue(handelAllElement(response))
+            }
+            else{
+                stateElements.postValue(Resource.Error("No Internet Connection"))
             }
 
-        }catch (t: Throwable) {
+        } catch (t: Throwable) {
             when(t) {
-                is IOException -> stateElements.postValue(Resource.Error("Network Failure "))
+                is IOException -> stateElements.postValue(Resource.Error("Network Failure"))
                 else -> stateElements.postValue(Resource.Error("Conversion Error"))
             }
         }
-
     }
 
 
