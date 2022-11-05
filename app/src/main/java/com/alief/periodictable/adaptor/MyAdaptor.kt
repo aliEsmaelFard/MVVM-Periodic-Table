@@ -1,4 +1,4 @@
-package com.alief.periodictable
+package com.alief.periodictable.adaptor
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -9,17 +9,18 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.alief.periodictable.model.ElementItem
+import com.alief.periodictable.R
+import com.alief.periodictable.model.Element
 
 class MyAdaptor(val listener: OnElementClickListener) :
     RecyclerView.Adapter<MyAdaptor.ViewHolder>() {
 
-    private val differCallback = object : DiffUtil.ItemCallback<ElementItem>() {
-        override fun areItemsTheSame(oldItem: ElementItem, newItem: ElementItem): Boolean {
+    private val differCallback = object : DiffUtil.ItemCallback<Element>() {
+        override fun areItemsTheSame(oldItem: Element, newItem: Element): Boolean {
             return oldItem.atomicNumber == newItem.atomicNumber
         }
 
-        override fun areContentsTheSame(oldItem: ElementItem, newItem: ElementItem): Boolean {
+        override fun areContentsTheSame(oldItem: Element, newItem: Element): Boolean {
             return oldItem == newItem
         }
 
@@ -39,11 +40,17 @@ class MyAdaptor(val listener: OnElementClickListener) :
 
         holder.apply {
             atomicNumber.text = element.atomicNumber.toString()
-            atomicMass.text = element.atomicMass
+            atomicMass.text = ""
             name.text = element.name
             symbol.text = element.symbol
 
-            cardView.setCardBackgroundColor(Color.parseColor("#${element.cpkHexColor}"))
+            if (element.cpkHexColor == "unknown" || element.cpkHexColor == "0" || element.cpkHexColor.length < 6)
+            {
+            cardView.setCardBackgroundColor(Color.parseColor("#A9D5D4"))
+            }
+            else {
+                cardView.setCardBackgroundColor(Color.parseColor("#${element.cpkHexColor}"))
+            }
         }
 
 
@@ -75,7 +82,5 @@ class MyAdaptor(val listener: OnElementClickListener) :
 }
 
 interface OnElementClickListener {
-    fun onClicked(elementItem: ElementItem)
-}
-
+    fun onClicked(element: Element)
 }
