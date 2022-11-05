@@ -15,4 +15,10 @@ interface ApiInterface {
     suspend fun getSearchElement(
         @Path("Lu") symbol: String
     ): Response<ElementItem>
+
+
+    @GET("elements/state/{gas}")
+    suspend fun getElementByState(
+        @Path("gas") state: String
+    ): Response<ElementItem>
 }

@@ -16,7 +16,7 @@ import com.alief.periodictable.model.Element
 import com.alief.periodictable.repository.Repository
 import com.alief.periodictable.util.Resource
 
-class TableActivity : AppCompatActivity(), OnElementClickListener {
+class TableActivity : AppCompatActivity(), OnElementClickListener, View.OnClickListener {
 
     lateinit var recyclerView: RecyclerView
     lateinit var myAdaptor: MyAdaptor
@@ -26,6 +26,13 @@ class TableActivity : AppCompatActivity(), OnElementClickListener {
     lateinit var toolbarTitle: TextView
     lateinit var toolbarSearchImage: ImageView
     lateinit var toolbarCloseSearch: ImageView
+
+    //category button
+    lateinit var all_btn: Button
+    lateinit var solid_btn: Button
+    lateinit var liquid_btn: Button
+    lateinit var gas_btn: Button
+    lateinit var unknow_btn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +67,7 @@ class TableActivity : AppCompatActivity(), OnElementClickListener {
         }
 
         //set up items toolbar visibility
-        toolbarSearchImage.setOnClickListener{
+        toolbarSearchImage.setOnClickListener {
             toolbarTitle.visibility = View.INVISIBLE
             toolbarSearchImage.visibility = View.INVISIBLE
             searchEditText.visibility = View.VISIBLE
@@ -128,9 +135,47 @@ class TableActivity : AppCompatActivity(), OnElementClickListener {
                 }
             }
         })
-
     }
 
+    //handel button onclick in category
+    fun categoryOnClick(){
+
+        all_btn.setOnClickListener {  }
+        solid_btn.setOnClickListener {  }
+        liquid_btn.setOnClickListener {  }
+        gas_btn.setOnClickListener {  }
+        unknow_btn.setOnClickListener {  }
+    }
+
+    private fun getElementsByState(state: String) {
+
+        viewModel.getElementsByState(state)
+        viewModel.stateElements.observe(this, Observer { resources ->
+            when (resources) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    resources.data?.let { response ->
+                        myAdaptor.differ.submitList(response.toList())
+                    }
+                }
+
+                is Resource.Error -> {
+                    hideProgressBar()
+
+                    var message = resources.message
+                    if (message == "BAD REQUEST") {
+                        message = "element is invalid"
+                    }
+
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
+    }
 
     fun showProgressBar() {
         progressBar.visibility = View.VISIBLE
@@ -145,13 +190,35 @@ class TableActivity : AppCompatActivity(), OnElementClickListener {
     }
 
     //find all Views
-    fun viewFinder()
-    {
+    fun viewFinder() {
         progressBar = findViewById(R.id.paginationProgressBar)
         recyclerView = findViewById(R.id.recyclerview)
         searchEditText = findViewById(R.id.toolbar_text_view)
         toolbarTitle = findViewById(R.id.toolbar_title)
         toolbarSearchImage = findViewById(R.id.toolbar_search_image)
         toolbarCloseSearch = findViewById(R.id.toolbar_close_image)
+
+        all_btn    = findViewById(R.id.button_all)
+        solid_btn  = findViewById(R.id.button_solid)
+        liquid_btn = findViewById(R.id.button_liquid)
+        gas_btn    = findViewById(R.id.button_gas)
+        unknow_btn = findViewById(R.id.button_unknown)
+
+        all_btn.setOnClickListener(this)
+        solid_btn.setOnClickListener(this)
+        liquid_btn.setOnClickListener(this)
+        gas_btn.setOnClickListener(this)
+        unknow_btn.setOnClickListener(this)
+    }
+
+    //set up category onclick
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.button_all -> getAllElements()
+            R.id.button_solid -> getElementsByState("solid")
+            R.id.button_liquid -> getElementsByState("liquid")
+            R.id.button_gas -> getElementsByState("gas")
+            R.id.button_unknown -> getElementsByState("unknown")
+        }
     }
 }

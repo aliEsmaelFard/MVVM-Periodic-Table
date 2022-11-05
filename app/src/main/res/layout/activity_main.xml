@@ -64,12 +64,96 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <HorizontalScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:scrollbarThumbVertical="@null"
+        android:scrollbarThumbHorizontal="@null"
+        android:scrollbars="none"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"
+                app:cornerRadius="10dp"
+                 android:backgroundTint="#F6F2F2"
+                android:textColor="@color/black"
+                app:strokeWidth="1dp"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="7dp"
+                app:strokeColor="@color/black"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_solid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Solid"
+                app:cornerRadius="10dp"
+                 android:backgroundTint="#F6F2F2"
+                android:textColor="@color/black"
+                app:strokeWidth="1dp"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="7dp"
+                app:strokeColor="@color/black"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_liquid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Liquid"
+                app:cornerRadius="10dp"
+                android:backgroundTint="#F6F2F2"
+                android:textColor="@color/black"
+                app:strokeWidth="1dp"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="7dp"
+                app:strokeColor="@color/black"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_gas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gas"
+                app:cornerRadius="10dp"
+                android:backgroundTint="#F6F2F2"
+                android:textColor="@color/black"
+                app:strokeWidth="1dp"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="7dp"
+                app:strokeColor="@color/black"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_unknown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="unknown"
+                app:cornerRadius="10dp"
+                 android:backgroundTint="#F6F2F2"
+                android:textColor="@color/black"
+                app:strokeWidth="1dp"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="7dp"
+                app:strokeColor="@color/black"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/scrollView"
         tools:listitem="@layout/elements_item" />
 
     <ProgressBar

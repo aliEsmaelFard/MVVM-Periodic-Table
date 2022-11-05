@@ -25,6 +25,8 @@ class ViewModel(
 
     val searchElements: MutableLiveData<Resource<ElementItem>> = MutableLiveData()
 
+    val stateElements: MutableLiveData<Resource<ElementItem>> = MutableLiveData()
+
     init {
         getElements()
     }
@@ -83,6 +85,37 @@ class ViewModel(
         }
 
     }
+
+
+    fun getElementsByState(state: String) = viewModelScope.launch {
+        val response = myRepository.getElementByState(state)
+        handelStateElement(response)
+    }
+
+    private fun handelStateElement(response: Response<ElementItem>) {
+
+        stateElements.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                if (response.isSuccessful) {
+                    stateElements.postValue(Resource.Success(response.body()))
+                } else {
+                    stateElements.postValue(Resource.Error(response.message()))
+                }
+            } else {
+                stateElements.postValue(Resource.Error("No Internet"))
+            }
+
+        }catch (t: Throwable) {
+            when(t) {
+                is IOException -> stateElements.postValue(Resource.Error("Network Failure"))
+                else -> stateElements.postValue(Resource.Error("Conversion Error"))
+            }
+        }
+
+    }
+
+
     private fun hasInternetConnection(): Boolean {
         val connectivityManager =
             getApplication<com.alief.periodictable.application.Application>().getSystemService(
