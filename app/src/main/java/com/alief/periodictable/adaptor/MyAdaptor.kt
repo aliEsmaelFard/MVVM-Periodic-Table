@@ -40,7 +40,7 @@ class MyAdaptor(val listener: OnElementClickListener) :
 
         holder.apply {
             atomicNumber.text = element.atomicNumber.toString()
-            atomicMass.text = ""
+            state.text = element.standardState
             name.text = element.name
             symbol.text = element.symbol
 
@@ -65,7 +65,7 @@ class MyAdaptor(val listener: OnElementClickListener) :
         val symbol: TextView = itemView.findViewById(R.id.item_symbol)
         val name: TextView = itemView.findViewById(R.id.item_name)
         val atomicNumber: TextView = itemView.findViewById(R.id.item_atomic_num)
-        val atomicMass: TextView = itemView.findViewById(R.id.item_atomic_mass)
+        val state: TextView = itemView.findViewById(R.id.item_state)
         var cardView: CardView = itemView.findViewById(R.id.cardview)
 
         init {
