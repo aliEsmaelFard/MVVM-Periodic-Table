@@ -14,6 +14,7 @@ import com.alief.periodictable.adaptor.MyAdaptor
 import com.alief.periodictable.adaptor.OnElementClickListener
 import com.alief.periodictable.model.Element
 import com.alief.periodictable.repository.Repository
+import com.alief.periodictable.ui.fragment.DetailBottomSheet
 import com.alief.periodictable.util.Resource
 
 class TableActivity : AppCompatActivity(), OnElementClickListener, View.OnClickListener {
@@ -186,7 +187,8 @@ class TableActivity : AppCompatActivity(), OnElementClickListener, View.OnClickL
     }
 
     override fun onClicked(element: Element) {
-        TODO("Not yet implemented")
+        val bt = DetailBottomSheet(element)
+        bt.show(supportFragmentManager, "sheet")
     }
 
     //find all Views
