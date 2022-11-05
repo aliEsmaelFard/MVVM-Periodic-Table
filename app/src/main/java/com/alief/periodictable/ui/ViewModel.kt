@@ -56,7 +56,7 @@ class ViewModel(
 
     }
 
-    private fun getSearchElements(symbol: String) = viewModelScope.launch {
+    fun getSearchElements(symbol: String) = viewModelScope.launch {
         val response = myRepository.getSearchElements(symbol)
         handelSearchElement(response)
     }
