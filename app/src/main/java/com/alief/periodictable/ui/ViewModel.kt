@@ -108,7 +108,7 @@ class ViewModel(
 
         }catch (t: Throwable) {
             when(t) {
-                is IOException -> stateElements.postValue(Resource.Error("Network Failure"))
+                is IOException -> stateElements.postValue(Resource.Error("Network Failure "))
                 else -> stateElements.postValue(Resource.Error("Conversion Error"))
             }
         }
